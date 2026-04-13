@@ -31,12 +31,12 @@ const recentActivity = [
 
 export default function DashboardPage() {
     return (
-        <div className="page-container">
+        <div className="flex-1 flex flex-col min-h-screen text-slate-200">
             <Header title="لوحة القيادة" />
 
-            <div className="page-content">
+            <div className="flex-1 p-8 flex flex-col gap-6">
                 {/* Stats */}
-                <div className="stats-grid">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     <StatCard
                         label="إجمالي الطلاب"
                         value={512}
@@ -68,46 +68,45 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Content Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '24px' }}>
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
                     {/* Recent Students Table */}
                     <Card
                         header={
                             <>
                                 <h3>سجلات الطلاب الحديثة</h3>
-                                <button className="btn btn-ghost btn-sm">عرض الكل</button>
+                                <button className="px-3 py-1.5 text-xs text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-lg transition-colors">عرض الكل</button>
                             </>
                         }
-                        className=""
                     >
-                        <div className="table-wrapper" style={{ border: 'none', background: 'transparent' }}>
-                            <table>
-                                <thead>
+                        <div className="w-full overflow-x-auto">
+                            <table className="w-full text-sm text-right border-collapse">
+                                <thead className="bg-indigo-500/5 border-b border-slate-700/50">
                                     <tr>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>المعرف</th>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>الاسم</th>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>الفصل</th>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>الحالة</th>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>الإجراءات</th>
+                                        <th className="py-3 px-4 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">المعرف</th>
+                                        <th className="py-3 px-4 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">الاسم</th>
+                                        <th className="py-3 px-4 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">الفصل</th>
+                                        <th className="py-3 px-4 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">الحالة</th>
+                                        <th className="py-3 px-4 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">الإجراءات</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {recentStudents.map((student) => (
-                                        <tr key={student.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 150ms' }}>
-                                            <td style={{ padding: '12px 16px', fontSize: '0.9rem', color: 'var(--primary-light)' }}>#{student.id}</td>
-                                            <td style={{ padding: '12px 16px', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{student.name}</td>
-                                            <td style={{ padding: '12px 16px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{student.class}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <span className={`badge ${student.status === 'نشط' ? 'badge-success' : 'badge-warning'}`}>
+                                        <tr key={student.id} className="border-b border-slate-700/50 hover:bg-slate-800/40 transition-colors">
+                                            <td className="py-3.5 px-4 text-sm text-indigo-400 font-semibold whitespace-nowrap">#{student.id}</td>
+                                            <td className="py-3.5 px-4 text-sm text-slate-200 whitespace-nowrap">{student.name}</td>
+                                            <td className="py-3.5 px-4 text-sm text-slate-400 whitespace-nowrap">{student.class}</td>
+                                            <td className="py-3.5 px-4 whitespace-nowrap">
+                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border ${student.status === 'نشط' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/15 text-amber-400 border-amber-500/20'}`}>
                                                     {student.status}
                                                 </span>
                                             </td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <div style={{ display: 'flex', gap: '6px' }}>
-                                                    <button className="btn btn-ghost btn-icon" style={{ width: 30, height: 30, padding: 4 }}>
-                                                        <Pencil size={14} />
+                                            <td className="py-3.5 px-4 whitespace-nowrap">
+                                                <div className="flex items-center gap-2">
+                                                    <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors">
+                                                        <Pencil size={15} />
                                                     </button>
-                                                    <button className="btn btn-danger btn-icon" style={{ width: 30, height: 30, padding: 4 }}>
-                                                        <Trash2 size={14} />
+                                                    <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/20 transition-colors">
+                                                        <Trash2 size={15} />
                                                     </button>
                                                 </div>
                                             </td>
@@ -126,28 +125,15 @@ export default function DashboardPage() {
                             </>
                         }
                     >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div className="flex flex-col">
                             {recentActivity.map((activity, index) => (
-                                <div key={index} style={{
-                                    display: 'flex',
-                                    gap: '12px',
-                                    alignItems: 'flex-start',
-                                    paddingBottom: index < recentActivity.length - 1 ? '16px' : '0',
-                                    borderBottom: index < recentActivity.length - 1 ? '1px solid var(--border-subtle)' : 'none',
-                                }}>
-                                    <div style={{
-                                        width: 8,
-                                        height: 8,
-                                        borderRadius: '50%',
-                                        background: 'var(--primary-light)',
-                                        marginTop: 6,
-                                        flexShrink: 0,
-                                    }} />
+                                <div key={index} className={`flex gap-3 items-start ${index < recentActivity.length - 1 ? 'pb-4 mb-4 border-b border-slate-700/50' : ''}`}>
+                                    <div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.5 }}>
+                                        <div className="text-[13px] text-slate-200 leading-relaxed font-medium">
                                             {activity.text}
                                         </div>
-                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                                        <div className="text-xs text-slate-500 mt-1">
                                             {activity.time}
                                         </div>
                                     </div>

@@ -22,11 +22,13 @@ export default function Table<T>({
   });
 
   return (
-    <div className="table-wrapper">
-      <table>
-        <TableHeader table={table} />
-        <TableBody table={table} />
-      </table>
+    <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl w-full">
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-sm text-right border-collapse">
+          <TableHeader table={table} />
+          <TableBody table={table} />
+        </table>
+      </div>
       <TableFooter pageCount={pageCount} />
     </div>
   );

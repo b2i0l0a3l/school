@@ -1,59 +1,46 @@
 "use client";
 
-interface InputProps {
+import { useState } from "react";
+
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
     label?: string;
-    placeholder?: string;
-    value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    type?: string;
     icon?: React.ReactNode;
-    className?: string;
-    name?: string;
-    required?: boolean;
-    disabled?: boolean;
 }
 
 export default function Input({
     label,
-    placeholder,
-    value,
-    onChange,
-    type = 'text',
     icon,
     className = '',
-    name,
-    required,
     disabled,
+    ...props
 }: InputProps) {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
-        <div className={`input-group ${className}`}>
-            {label && <label className="input-label">{label}</label>}
-            {icon ? (
-                <div className="input-with-icon">
-                    <input
-                        type={type}
-                        placeholder={placeholder}
-                        value={value}
-                        onChange={onChange}
-                        name={name}
-                        required={required}
-                        disabled={disabled}
-                        className="input"
-                    />
-                    <span className="input-icon">{icon}</span>
-                </div>
-            ) : (
-                <input
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                    name={name}
-                    required={required}
-                    disabled={disabled}
-                    className="input"
-                />
+        <div className={`flex flex-col gap-1.5 w-full ${className}`}>
+            {label && (
+                <label className="text-sm font-medium text-slate-300">
+                    {label}
+                </label>
             )}
+            <div className="relative group">
+                <input
+                    disabled={disabled}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    className={`w-full px-4 py-2.5 bg-slate-900/60 border rounded-xl text-slate-100 text-sm outline-none transition-all duration-200 placeholder:text-slate-500
+                        ${isFocused ? 'border-indigo-500 shadow-[0_0_0_3px_rgba(99,102,241,0.15)] bg-slate-800/80 ring-1 ring-indigo-500/50' : 'border-slate-700/50 hover:border-slate-500/50 hover:bg-slate-800/60'}
+                        ${disabled ? 'opacity-50 cursor-not-allowed bg-slate-900/30' : ''}
+                        ${icon ? 'pr-11' : ''}`}
+                    {...props}
+                />
+                {icon && (
+                    <span className={`absolute top-1/2 right-3 -translate-y-1/2 transition-colors duration-200 pointer-events-none 
+                        ${isFocused ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-400'}`}>
+                        {icon}
+                    </span>
+                )}
+            </div>
         </div>
     );
 }

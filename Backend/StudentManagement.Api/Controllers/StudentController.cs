@@ -6,10 +6,9 @@ using StudentManagement.Application.Features.Messages.Request.Query.StudentQuery
 
 namespace StudentManagement.Api.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/Student")]
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class StudentController : ApiControllerBase
     {
         private readonly IMediator _Mediator;

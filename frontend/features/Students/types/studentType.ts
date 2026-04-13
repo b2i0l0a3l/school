@@ -1,8 +1,12 @@
-
 export type Student = {
-    id: number;
-    name: string;
-    class: string;
-    email: string;
-    status: string;
+  id: number;
+  userId?: string;
+  fullName: string;
+  dateOfBirth: Date;
+  enrollmentDate: Date;
+  gender: number;
+  classId: number;
+  class?: string;
+  parentId?: number;
+  parent?: string;
 };

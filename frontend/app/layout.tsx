@@ -13,9 +13,9 @@ const outfit = Outfit({
   weight: ['300', '400', '500', '600', '700'],
 });
 
-import { Toaster } from "react-hot-toast";
-import QueryProvider from "@/providers/QueryProvider";
 import SideBar from "@/Components/Ui/Sidebar/sidebar";
+import ToastContainer from "@/Components/Ui/Toast/ToastContainer";
+import PopupContainer from "@/Components/Ui/Popup/PopupContainer";
 
 export const metadata: Metadata = {
   title: "School Management System | نظام إدارة المدرسة",
@@ -33,25 +33,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${outfit.variable} antialiased h-full`}
     >
       <body className="min-h-full flex">
-        <QueryProvider>
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'var(--background-secondary)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--card-border)',
-                borderRadius: 'var(--radius-md)',
-              },
-            }}
-          />
           <div className="flex w-full">
             <SideBar />
             <main style={{ flex: 1, minHeight: '100vh', overflow: 'auto' }}>
               {children}
             </main>
           </div>
-        </QueryProvider>
+          <ToastContainer />
+          <PopupContainer />
       </body>
     </html>
   );

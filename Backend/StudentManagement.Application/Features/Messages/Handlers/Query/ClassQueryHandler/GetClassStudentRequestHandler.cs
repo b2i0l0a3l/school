@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using MediatR;
 using StudentManagement.Application.Features.Messages.Request.Query.ClassQueryRequest;
+using StudentManagement.Domain.common;
 using StudentManagement.Domain.Common;
 using StudentManagement.Domain.Entities;
 using StudentManagement.Domain.Interfaces;
@@ -21,15 +22,15 @@ namespace StudentManagement.Application.Features.Messages.Handlers.Query.ClassQu
         }
         public async Task<Result<ClassStudentModel>> Handle(GetClassStudentRequest request, CancellationToken cancellationToken)
         {
-            Result<IEnumerable<Student>?> Student = await _StudentRepo.GetِAllByCondition(x => x.ClassId == request.ClassId);
-            if (!Student.IsSuccess || Student.Value == null || !Student.Value.Any()) return Student.Error!;
+            Result<PagedResult<Student?>> Student = await _StudentRepo.GetِAllByCondition(1, int.MaxValue, x => x.ClassId == request.ClassId);
+            if (!Student.IsSuccess || Student.Value == null || Student.Value.Items == null || !Student.Value.Items.Any()) return Student.Error!;
 
             ClassStudentModel model = new()
             {
                 ClassId = request.ClassId,
-                Students = Student.Value.Select(x => new StudentModel
+                Students = Student.Value.Items.Where(x => x != null).Select(x => new StudentModel
                 {
-                    Id = x.Id,
+                    Id = x!.Id,
                     FullName = x.FullName,
                     DateOfBirth = x.DateOfBirth,
                     EnrollmentDate = x.EnrollmentDate,
