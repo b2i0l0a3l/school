@@ -2,28 +2,31 @@
 
 import { useState, useMemo } from "react";
 import SearchInput from "@/Components/Ui/SearchInput/SearchInput";
-import AttendanceTable, { AttendanceRecord } from "./Table/AttendanceTable";
+import AttendanceTable from "./Table/AttendanceTable";
 import Button from "@/Components/Ui/Button/Button";
 import { FileSpreadsheet } from "lucide-react";
+import { PaginatedResponse } from "@/Util/Types/AipResponse";
+import { Attendance } from "../types/attendanceType";
 
-const mockAttendance: AttendanceRecord[] = [
-    { studentId: 101, studentName: "محمد خالد", class: "12 أ", date: "2023-10-25", status: "حاضر" },
-    { studentId: 102, studentName: "فاطمة أحمد", class: "11 ب", date: "2023-10-25", status: "غائب" },
-    { studentId: 103, studentName: "يوسف علي", class: "10 ج", date: "2023-10-25", status: "حاضر" },
-    { studentId: 104, studentName: "نورة سعيد", class: "9 د", date: "2023-10-25", status: "متأخر" },
-    { studentId: 105, studentName: "أحمد محمود", class: "12 ب", date: "2023-10-25", status: "حاضر" },
-];
+interface AttendanceProps {
+    allAttendance: PaginatedResponse<Attendance[]> | null;
+}
 
-export default function AttendanceSection() {
+export default function AttendanceSection({ allAttendance }: AttendanceProps) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [dateFilter, setDateFilter] = useState("2023-10-25");
+    const [dateFilter, setDateFilter] = useState(new Date().toISOString().split('T')[0]);
 
     const filteredRecords = useMemo(() => {
-        let filtered = mockAttendance;
-        if (dateFilter) filtered = filtered.filter(r => r.date === dateFilter);
-        if (searchQuery) filtered = filtered.filter(r => r.studentName.includes(searchQuery) || r.class.includes(searchQuery));
+        let filtered = allAttendance?.items ?? [];
+        if (dateFilter) filtered = filtered.filter(r => r.date.startsWith(dateFilter));
+        if (searchQuery) {
+            filtered = filtered.filter(r => 
+                r.studentName?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                r.class?.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
         return filtered;
-    }, [searchQuery, dateFilter]);
+    }, [searchQuery, dateFilter, allAttendance]);
 
     return (
         <div className="flex-1 flex flex-col min-h-screen text-slate-200">
@@ -32,7 +35,7 @@ export default function AttendanceSection() {
                     <div>
                         <h1 className="text-2xl font-bold text-slate-50">سجل الحضور والغياب</h1>
                         <p className="text-sm text-slate-400 mt-1">
-                            سجلات يوم {dateFilter}
+                            إجمالي {allAttendance?.totalItems ?? 0} سجل
                         </p>
                     </div>
                     <Button
@@ -61,7 +64,7 @@ export default function AttendanceSection() {
 
                 <AttendanceTable
                     data={filteredRecords}
-                    pageCount={1}
+                    pageCount={allAttendance?.totalPages ?? 0}
                 />
             </div>
         </div>

@@ -20,6 +20,8 @@ interface StudentProps {
 export default function StudentSection({ allStudents, initialClasses }: StudentProps) {
   const setClasses = useClassStore(state => state.setClasses);
 
+  console.log(allStudents);
+  console.log(allStudents?.totalPages);
   useEffect(() => {
     setClasses(initialClasses);
   }, [initialClasses, setClasses]);

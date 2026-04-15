@@ -8,6 +8,7 @@ interface ExtendedButtonProps extends ButtonProps {
     size?: ButtonSize;
     icon?: React.ReactNode;
     loading?: boolean;
+    type?: "button" | "submit" | "reset";
 }
 
 const baseClasses = "inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all relative overflow-hidden whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed active:scale-95";
@@ -28,6 +29,7 @@ const sizeClasses: Record<ButtonSize, string> = {
 };
 
 export default function Button({
+    type = "button",
     text,
     onClick,
     disabled,
@@ -39,6 +41,7 @@ export default function Button({
 }: ExtendedButtonProps) {
     return (
         <button
+            type={type}
             onClick={onClick}
             disabled={disabled || loading}
             className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}

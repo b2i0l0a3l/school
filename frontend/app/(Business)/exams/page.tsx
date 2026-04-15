@@ -1,11 +1,12 @@
 import ExamSection from "@/features/Exams/Components/ExamSection";
-import Header from "@/Components/Ui/Header/Header";
+import { getExams } from "@/features/Exams/Api/ExamApi";
 
-export default function ExamsPage() {
+export default async function ExamsPage() {
+    const exams = await getExams();
+
     return (
         <div className="flex flex-col flex-1 pb-[20px]">
-            <Header title="الامتحانات" />
-            <ExamSection />
+            <ExamSection allExams={exams.value ?? null} />
         </div>
     );
 }

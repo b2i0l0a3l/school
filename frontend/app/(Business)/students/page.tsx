@@ -5,7 +5,7 @@ import { getClasses } from "@/features/Class/Api/ClassApi";
 
 export default async function StudentsPage() {
   const [students, classes] = await Promise.all([
-    getStudents(),
+    getStudents(1, 3),
     getClasses(),
   ]);
 

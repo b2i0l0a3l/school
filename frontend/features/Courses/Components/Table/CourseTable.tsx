@@ -4,15 +4,7 @@ import Table from "@/Components/Ui/Table/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-
-export interface Course {
-    id: number;
-    title: string;
-    code: string;
-    credits: number;
-    teacher: string;
-    status: string;
-}
+import { Course } from "../../types/courseType";
 
 interface CourseTableProps {
     data: Course[];
@@ -24,38 +16,19 @@ export default function CourseTable({ data, pageCount }: CourseTableProps) {
 
     const columns = useMemo(
         () => [
-            columnHelper.accessor("code", {
-                header: "الرمز",
+            columnHelper.accessor("id", {
+                header: "الرقم",
                 cell: (info) => (
-                    <span className="text-indigo-400 font-semibold">{info.getValue()}</span>
+                    <span className="text-indigo-400 font-semibold">#{info.getValue()}</span>
                 ),
             }),
-            columnHelper.accessor("title", {
+            columnHelper.accessor("subjectName", {
                 header: "اسم المنهج",
                 cell: (info) => <span className="text-slate-200">{info.getValue()}</span>,
             }),
-            columnHelper.accessor("credits", {
-                header: "الساعات المعتمدة",
-                cell: (info) => <span className="text-slate-400 font-mono text-xs">{info.getValue()}</span>,
-            }),
-            columnHelper.accessor("teacher", {
-                header: "المعلم المسؤول",
-                cell: (info) => (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                        {info.getValue() || "غير معين"}
-                    </span>
-                ),
-            }),
-            columnHelper.accessor("status", {
-                header: "الحالة",
-                cell: (info) => {
-                    const status = info.getValue();
-                    return (
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border ${status === 'نشط' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/15 text-rose-400 border-rose-500/20'}`}>
-                            {status}
-                        </span>
-                    );
-                },
+            columnHelper.accessor("creatAt", {
+                header: "تاريخ الإنشاء",
+                cell: (info) => <span className="text-slate-400 text-xs">{new Date(info.getValue()).toLocaleDateString("ar-EG")}</span>,
             }),
             columnHelper.display({
                 id: "actions",

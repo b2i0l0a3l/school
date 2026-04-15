@@ -1,11 +1,12 @@
 import AttendanceSection from "@/features/Attendance/Components/AttendanceSection";
-import Header from "@/Components/Ui/Header/Header";
+import { getAttendance } from "@/features/Attendance/Api/AttendanceApi";
 
-export default function AttendancePage() {
+export default async function AttendancePage() {
+    const attendance = await getAttendance();
+
     return (
         <div className="flex flex-col flex-1 pb-[20px]">
-            <Header title="الحضور والغياب" />
-            <AttendanceSection />
+            <AttendanceSection allAttendance={attendance.value ?? null} />
         </div>
     );
 }

@@ -2,12 +2,12 @@ import { fetchApi } from "@/Util/Api/ApiRequest";
 import { ApiResponse, PaginatedResponse } from "@/Util/Types/AipResponse";
 import { Student } from "../types/studentType";
 
-export async function getStudents(): Promise<
+export async function getStudents(pageNumber: number, pageSize: number): Promise<
   ApiResponse<PaginatedResponse<Student[]>>
 > {
   try {
     const result = await fetchApi<PaginatedResponse<Student[]>>(
-      `/Student/GetAllStudents?pageNumber=1&pageSize=10`,
+      `/Student/GetAllStudents?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       {
         cache: "no-store",
       },

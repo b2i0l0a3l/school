@@ -1,11 +1,12 @@
 import CourseSection from "@/features/Courses/Components/CourseSection";
-import Header from "@/Components/Ui/Header/Header";
+import { getCourses } from "@/features/Courses/Api/CourseApi";
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+    const courses = await getCourses();
+
     return (
         <div className="flex flex-col flex-1 pb-[20px]">
-            <Header title="المناهج الدراسية" />
-            <CourseSection />
+            <CourseSection allCourses={courses.value ?? null} />
         </div>
     );
 }

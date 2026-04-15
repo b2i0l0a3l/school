@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 const links = [
     {
         title: "لوحة القيادة",
-        href: "/dashboard",
+        href: "/",
         icon: <LayoutDashboard size={20} />,
     },
     {

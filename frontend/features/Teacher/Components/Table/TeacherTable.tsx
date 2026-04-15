@@ -4,15 +4,7 @@ import Table from "@/Components/Ui/Table/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-
-export interface Teacher {
-    id: number;
-    name: string;
-    email: string;
-    subject: string;
-    status: string;
-    joinDate: string;
-}
+import { Teacher } from "../../types/teacherType";
 
 interface TeacherTableProps {
     data: Teacher[];
@@ -30,32 +22,21 @@ export default function TeacherTable({ data, pageCount }: TeacherTableProps) {
                     <span className="text-indigo-400 font-semibold">#{info.getValue()}</span>
                 ),
             }),
-            columnHelper.accessor("name", {
+            columnHelper.accessor("fullName", {
                 header: "الاسم",
                 cell: (info) => <span className="text-slate-200">{info.getValue()}</span>,
             }),
-            columnHelper.accessor("email", {
-                header: "البريد الإلكتروني",
-                cell: (info) => <span className="text-slate-400 text-xs">{info.getValue()}</span>,
+            columnHelper.accessor("hireDate", {
+                header: "تاريخ التعيين",
+                cell: (info) => <span className="text-slate-400 text-xs">{new Date(info.getValue()).toLocaleDateString("ar-EG")}</span>,
             }),
-            columnHelper.accessor("subject", {
-                header: "المادة",
+            columnHelper.accessor("department", {
+                header: "القسم",
                 cell: (info) => (
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                        {info.getValue()}
+                        {info.getValue() || "غير محدد"}
                     </span>
                 ),
-            }),
-            columnHelper.accessor("status", {
-                header: "الحالة",
-                cell: (info) => {
-                    const status = info.getValue();
-                    return (
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border ${status === 'نشط' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/15 text-amber-400 border-amber-500/20'}`}>
-                            {status}
-                        </span>
-                    );
-                },
             }),
             columnHelper.display({
                 id: "actions",

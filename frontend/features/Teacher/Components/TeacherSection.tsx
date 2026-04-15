@@ -2,24 +2,24 @@
 
 import { useState, useMemo } from "react";
 import SearchInput from "@/Components/Ui/SearchInput/SearchInput";
-import TeacherTable, { Teacher } from "./Table/TeacherTable";
+import TeacherTable from "./Table/TeacherTable";
 import AddTeacherButton from "./Button/AddTeacherButton";
+import { PaginatedResponse } from "@/Util/Types/AipResponse";
+import { Teacher } from "../types/teacherType";
 
-const mockTeachers: Teacher[] = [
-    { id: 1, name: "أحمد محمود", email: "ahmed@school.com", subject: "الرياضيات", status: "نشط", joinDate: "2023-01-15" },
-    { id: 2, name: "سارة حسن", email: "sara@school.com", subject: "العلوم", status: "نشط", joinDate: "2023-02-20" },
-    { id: 3, name: "خالد عبد الله", email: "khaled@school.com", subject: "اللغة العربية", status: "في إجازة", joinDate: "2022-09-01" },
-    { id: 4, name: "مريم سعيد", email: "maryam@school.com", subject: "اللغة الإنجليزية", status: "نشط", joinDate: "2023-05-10" },
-    { id: 5, name: "يوسف إبراهيم", email: "yousef@school.com", subject: "التاريخ", status: "مستقيل", joinDate: "2021-11-05" },
-];
+interface TeacherProps {
+    allTeachers: PaginatedResponse<Teacher[]> | null;
+}
 
-export default function TeacherSection() {
+export default function TeacherSection({ allTeachers }: TeacherProps) {
     const [searchQuery, setSearchQuery] = useState("");
 
     const filteredTeachers = useMemo(() => {
-        if (!searchQuery) return mockTeachers;
-        return mockTeachers.filter(t => t.name.includes(searchQuery) || t.subject.includes(searchQuery));
-    }, [searchQuery]);
+        if (!searchQuery) return allTeachers?.items ?? [];
+        return (allTeachers?.items ?? []).filter(t => 
+            t.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [searchQuery, allTeachers]);
 
     return (
         <div className="flex-1 flex flex-col min-h-screen text-slate-200">
@@ -28,7 +28,7 @@ export default function TeacherSection() {
                     <div>
                         <h1 className="text-2xl font-bold text-slate-50">إدارة المعلمين</h1>
                         <p className="text-sm text-slate-400 mt-1">
-                            إجمالي {mockTeachers.length} معلم
+                            إجمالي {allTeachers?.totalItems ?? 0} معلم
                         </p>
                     </div>
                     <AddTeacherButton />
@@ -36,7 +36,7 @@ export default function TeacherSection() {
 
                 <div className="flex items-center gap-3">
                     <SearchInput
-                        placeholder="البحث باسم المعلم أو المادة..."
+                        placeholder="البحث باسم المعلم..."
                         onSearch={(value) => setSearchQuery(value)}
                         className="w-full max-w-sm"
                     />
@@ -44,7 +44,7 @@ export default function TeacherSection() {
 
                 <TeacherTable
                     data={filteredTeachers}
-                    pageCount={1}
+                    pageCount={allTeachers?.totalPages ?? 0}
                 />
             </div>
         </div>
