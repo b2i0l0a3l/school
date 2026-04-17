@@ -1,36 +1,66 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Input from "@/Components/Ui/Input/Input";
 import Button from "@/Components/Ui/Button/Button";
 import { Mail, Lock } from "lucide-react";
+import { login } from "../api/LoginApi";
+import toast from "react-hot-toast";
+import { setAccessToken, setRefreshToken } from "@/Util/Api/session";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const payload = useMemo(() => ({
+        email,
+        password,
+    }), [email, password]);
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+     try{
         setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 1500);
+        const result = await login(payload.email, payload.password);
+        if (!result.succeeded || !result.value) {
+            toast.error(result.message);
+        }
+        console.log(result);
+        setAccessToken(result.value?.token!);
+        setRefreshToken(result.value?.refreshToken!);
+        router.push("/");
+     }catch(error){
+        console.log(error);
+        toast.error("Login failed");
+     }finally{
+        setIsLoading(false);
+     }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 label="البريد الإلكتروني"
                 type="email"
                 placeholder="example@school.com"
                 icon={<Mail className="w-5 h-5" />}
                 required
+                autoComplete="email"
             />
             
             <div className="space-y-1">
                 <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     label="كلمة المرور"
                     type="password"
                     placeholder="••••••••"
                     icon={<Lock className="w-5 h-5" />}
                     required
+                    autoComplete="current-password"
                 />
                 <div className="flex justify-end mt-1">
                     <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">

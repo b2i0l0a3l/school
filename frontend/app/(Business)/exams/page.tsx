@@ -1,12 +1,18 @@
 import ExamSection from "@/features/Exams/Components/ExamSection";
 import { getExams } from "@/features/Exams/Api/ExamApi";
 
-export default async function ExamsPage() {
-    const exams = await getExams();
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function ExamsPage(props: PageProps) {
+    const searchParams = await props.searchParams;
+    const page = Number(searchParams?.page) || 1;
+    const pageSize = 10;
+
+    const exams = await getExams(page, pageSize);
 
     return (
-        <div className="flex flex-col flex-1 pb-[20px]">
-            <ExamSection allExams={exams.value ?? null} />
-        </div>
+        <ExamSection allExams={exams.value ?? null} />
     );
 }

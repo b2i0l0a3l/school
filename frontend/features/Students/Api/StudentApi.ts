@@ -133,3 +133,39 @@ export async function deleteStudent(id: number): Promise<ApiResponse<string>> {
     };
   }
 }
+
+export async function updateStudent(student: Student): Promise<
+  ApiResponse<Student>
+> {
+  try {
+    const result = await fetchApi<Student>(
+      `/Student/UpdateStudent?Id=${student.id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(student),
+        cache: "no-store",
+      },
+    );
+    if (!result.succeeded || !result.value) {
+      return {
+        message: result.message,
+        succeeded: false,
+        statusCode: result.statusCode,
+        value: null,
+      };
+    }
+    return {
+      message: result.message,
+      succeeded: true,
+      statusCode: result.statusCode,
+      value: result.value,
+    };
+  } catch (error) {
+    return {
+      message: "Student not updated",
+      succeeded: false,
+      statusCode: 404,
+      value: null,
+    };
+  }
+}

@@ -91,7 +91,7 @@ export default function StudentModal({
       </div>
       <Input
         label="تاريخ الميلاد"
-        value={student.dateOfBirth.toISOString().split("T")[0]}
+        value={student.dateOfBirth ? new Date(student.dateOfBirth).toISOString().split("T")[0] : ""}
         type="date"
         onChange={(e) =>
           setStudent({ ...student, dateOfBirth: new Date(e.target.value) })
@@ -99,7 +99,7 @@ export default function StudentModal({
       />
       <Input
         label="تاريخ التسجيل"
-        value={student.enrollmentDate.toISOString().split("T")[0]}
+        value={student.enrollmentDate ? new Date(student.enrollmentDate).toISOString().split("T")[0] : ""}
         type="date"
         onChange={(e) =>
           setStudent({ ...student, enrollmentDate: new Date(e.target.value) })

@@ -3,9 +3,17 @@ import { getStudents } from "@/features/Students/Api/StudentApi";
 import { getClasses } from "@/features/Class/Api/ClassApi";
 
 
-export default async function StudentsPage() {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function StudentsPage(props: PageProps) {
+  const searchParams = await props.searchParams;
+  const page = Number(searchParams?.page) || 1;
+  const pageSize = 3;
+
   const [students, classes] = await Promise.all([
-    getStudents(1, 3),
+    getStudents(page, pageSize),
     getClasses(),
   ]);
 

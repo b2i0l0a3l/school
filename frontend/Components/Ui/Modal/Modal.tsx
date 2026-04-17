@@ -1,7 +1,8 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
     isOpen: boolean;
@@ -12,6 +13,12 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children, footer }: ModalProps) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -33,10 +40,10 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
         return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
+    if (!isOpen || !mounted) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+    return createPortal(
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
             <div className="relative w-full max-w-lg max-h-[90vh] overflow-hidden bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
                     <h2 className="text-xl font-bold text-slate-100">{title}</h2>
@@ -53,6 +60,7 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
                     </div>
                 )}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

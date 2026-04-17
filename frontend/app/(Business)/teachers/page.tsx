@@ -1,12 +1,18 @@
 import TeacherSection from "@/features/Teacher/Components/TeacherSection";
 import { getTeachers } from "@/features/Teacher/Api/TeacherApi";
 
-export default async function TeachersPage() {
-    const teachers = await getTeachers();
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function TeachersPage(props: PageProps) {
+    const searchParams = await props.searchParams;
+    const page = Number(searchParams?.page) || 1;
+    const pageSize = 10;
+
+    const teachers = await getTeachers(page, pageSize);
 
     return (
-        <div className="flex flex-col flex-1 pb-[20px]">
-            <TeacherSection allTeachers={teachers.value ?? null} />
-        </div>
+        <TeacherSection allTeachers={teachers.value ?? null} />
     );
 }

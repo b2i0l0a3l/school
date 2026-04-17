@@ -3,23 +3,23 @@
 import { useState } from "react";
 import Button from "@/Components/Ui/Button/Button";
 import { Plus } from "lucide-react";
-import CourseModal from "../Modal/CourseModal";
-import { addCourse } from "../../Api/CourseApi";
-import { Course } from "../../types/courseType";
+import ClassModal from "../Modal/ClassModal";
+import { addClass } from "../../Api/ClassApi";
+import { Class } from "../../Type/ClassType";
 import useToastStore from "@/Components/Ui/Toast/ToastStore";
 
-export default function AddCourseButton() {
+export default function AddClassButton() {
     const [isOpen, setIsOpen] = useState(false);
     const toast = useToastStore();
 
-    const handleAdd = async (course: Course) => {
+    const handleAdd = async (classData: Class) => {
         try {
-            const result = await addCourse(course);
+            const result = await addClass(classData);
             if (result.succeeded) {
-                toast.success("تمت إضافة المنهج بنجاح");
+                toast.success("تمت إضافة الفصل بنجاح");
                 setIsOpen(false);
             } else {
-                toast.error(result.message || "فشل في إضافة المنهج");
+                toast.error(result.message || "فشل في إضافة الفصل");
             }
         } catch (error) {
             toast.error("حدث خطأ غير متوقع");
@@ -29,12 +29,12 @@ export default function AddCourseButton() {
     return (
         <>
             <Button
-                text="إضافة منهج"
+                text="إضافة فصل"
                 icon={<Plus size={16} />}
                 variant="primary"
                 onClick={() => setIsOpen(true)}
             />
-            {isOpen && <CourseModal isOpen={isOpen} onClose={() => setIsOpen(false)} onClick={handleAdd} />}
+            {isOpen && <ClassModal isOpen={isOpen} onClose={() => setIsOpen(false)} onClick={handleAdd} />}
         </>
     );
 }

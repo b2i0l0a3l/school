@@ -3,8 +3,9 @@
 import Table from "@/Components/Ui/Table/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { Pencil, Trash2 } from "lucide-react";
 import { Course } from "../../types/courseType";
+import UpdateCourseButton from "../Button/UpdateCourseButton";
+import DeleteCourseButton from "../Button/DeleteCourseButton";
 
 interface CourseTableProps {
     data: Course[];
@@ -33,14 +34,10 @@ export default function CourseTable({ data, pageCount }: CourseTableProps) {
             columnHelper.display({
                 id: "actions",
                 header: "الإجراءات",
-                cell: () => (
+                cell: (info) => (
                     <div className="flex items-center gap-2">
-                        <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors">
-                            <Pencil size={15} />
-                        </button>
-                        <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/20 transition-colors">
-                            <Trash2 size={15} />
-                        </button>
+                        <UpdateCourseButton course={info.row.original} />
+                        <DeleteCourseButton id={info.row.original.id} />
                     </div>
                 ),
             }),

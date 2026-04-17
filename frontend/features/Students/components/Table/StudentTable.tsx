@@ -1,12 +1,13 @@
 import Table from "@/Components/Ui/Table/Table";
-import useClassStore from "@/features/Class/Store/ClassStore";
 import { Student } from "@/features/Students/types/studentType";
 import { DateFormate } from "@/Util/dateFormate";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { Class } from "@/features/Class/Type/ClassType";
+import DeleteButton from "../Button/deleteButton";
+import UpdateStudentButton from "../Button/updateStudentButton";
 
 interface StudentTableProps {
   filterData: Student[];
@@ -19,8 +20,6 @@ export default function StudentTable({
   classes = [],
 }: StudentTableProps) {
   const columnHelper = createColumnHelper<Student>();
-
-
   const columns = useMemo(
     () => [
       columnHelper.accessor("id", {
@@ -70,20 +69,15 @@ export default function StudentTable({
       columnHelper.display({
         id: "actions",
         header: "الإجراءات",
-        cell: () => (
+        cell: (info) => (
           <div className="flex items-center gap-2">
-            <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors">
-              <Pencil size={15} />
-            </button>
-            <button className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/20 transition-colors">
-              <Trash2 size={15} />
-            </button>
+            <UpdateStudentButton student={info.row.original} />
+            <DeleteButton id={info.row.original.id} />
           </div>
         ),
       }),
     ],
     [classes],
   );
-
   return <Table data={filterData} pageCount={pageCount} columns={columns} />;
 }

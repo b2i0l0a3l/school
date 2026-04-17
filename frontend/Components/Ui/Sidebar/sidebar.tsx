@@ -24,6 +24,11 @@ const links = [
         icon: <Users size={20} />,
     },
     {
+        title: "إدارة الفصول",
+        href: "/class",
+        icon: <Users size={20} />,
+    },
+    {
         title: "إدارة المعلمين",
         href: "/teachers",
         icon: <GraduationCap size={20} />,
@@ -57,10 +62,10 @@ export default function SideBar() {
         <div className="w-[260px] min-w-[260px] h-screen sticky top-0 bg-slate-950 border-l border-slate-800/50 flex flex-col overflow-y-auto z-40 hidden md:flex">
             {/* Logo */}
             <div className="px-5 py-6 flex items-center justify-center gap-3 border-b border-slate-800/50">
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-700 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(67,56,202,0.2)]">
+                <div className="w-10 h-10 bg-linear-to-br from-indigo-700 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(67,56,202,0.2)]">
                     <GraduationCap size={22} />
                 </div>
-                <span className="text-lg font-bold bg-gradient-to-r from-indigo-400 to-teal-400 bg-clip-text text-transparent">
+                <span className="text-lg font-bold bg-linear-to-r from-indigo-400 to-teal-400 bg-clip-text text-transparent">
                     بوابة المدرسة
                 </span>
             </div>
@@ -80,9 +85,9 @@ export default function SideBar() {
                                 }`}
                         >
                             {isActive && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-[60%] bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-r-md" />
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-[60%] bg-linear-to-b from-indigo-500 to-indigo-600 rounded-r-md" />
                             )}
-                            <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">{link.icon}</span>
+                            <span className="shrink-0 transition-transform duration-200 group-hover:scale-110">{link.icon}</span>
                             <span>{link.title}</span>
                         </Link>
                     );

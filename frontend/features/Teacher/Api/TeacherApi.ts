@@ -96,3 +96,65 @@ export async function deleteTeacher(id: number): Promise<ApiResponse<string>> {
     };
   }
 }
+
+export async function addTeacher(teacher: Teacher): Promise<ApiResponse<Teacher>> {
+  try {
+    const result = await fetchApi<Teacher>(`/Teacher/AddNewTeacher`, {
+      method: "POST",
+      body: JSON.stringify(teacher),
+      cache: "no-store",
+    });
+    if (!result.succeeded || !result.value) {
+      return {
+        message: result.message,
+        succeeded: false,
+        statusCode: result.statusCode,
+        value: null,
+      };
+    }
+    return {
+      message: result.message,
+      succeeded: true,
+      statusCode: result.statusCode,
+      value: result.value,
+    };
+  } catch (error) {
+    return {
+      message: "Teacher not added",
+      succeeded: false,
+      statusCode: 404,
+      value: null,
+    };
+  }
+}
+
+export async function updateTeacher(teacher: Teacher): Promise<ApiResponse<Teacher>> {
+  try {
+    const result = await fetchApi<Teacher>(`/Teacher/UpdateTeacher?Id=${teacher.id}`, {
+      method: "PUT",
+      body: JSON.stringify(teacher),
+      cache: "no-store",
+    });
+    if (!result.succeeded || !result.value) {
+      return {
+        message: result.message,
+        succeeded: false,
+        statusCode: result.statusCode,
+        value: null,
+      };
+    }
+    return {
+      message: result.message,
+      succeeded: true,
+      statusCode: result.statusCode,
+      value: result.value,
+    };
+  } catch (error) {
+    return {
+      message: "Teacher not updated",
+      succeeded: false,
+      statusCode: 404,
+      value: null,
+    };
+  }
+}

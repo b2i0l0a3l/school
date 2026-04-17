@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import useClassStore from "@/features/Class/Store/ClassStore";
 import { Class } from "@/features/Class/Type/ClassType";
 import SearchInput from "@/Components/Ui/SearchInput/SearchInput";
-import Header from "@/Components/Ui/Header/Header";
 import AddStudentButton from "./Button/AddStudentButton";
 
 const StudentTable = dynamic(() => import("./Table/StudentTable"), {
@@ -19,14 +18,10 @@ interface StudentProps {
 }
 export default function StudentSection({ allStudents, initialClasses }: StudentProps) {
   const setClasses = useClassStore(state => state.setClasses);
-
-  console.log(allStudents);
-  console.log(allStudents?.totalPages);
   useEffect(() => {
     setClasses(initialClasses);
   }, [initialClasses, setClasses]);
   const [searchQuery, setSearchQuery] = useState("");
-
   const filteredStudents = allStudents?.items?.filter((student) => {
     if (!searchQuery) return true;
     return student.fullName.toLowerCase().includes(searchQuery.toLowerCase());
